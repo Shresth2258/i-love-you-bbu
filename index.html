@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I Love You</title>
+<style>
+:root{
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg1:#1a0b2e; --bg2:#4a1042; --bg3:#7a1f4f;
+  --heart:#ff3d71; --glow:rgba(255,61,113,.7); --text:#fff5f8;
+}
+html{scroll-padding-top: env(safe-area-inset-top, 0px); height:100%}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh; overflow-x:hidden; padding:2rem 1rem;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem;
+  font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3),var(--bg2));
+  background-size:300% 300%;
+  animation:bg 14s ease infinite;
+  color:var(--text);
+}
+@keyframes bg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* Heart */
+.heart-wrap{position:relative; width:150px; height:150px; display:grid; place-items:center}
+.heart{
+  position:relative; width:100px; height:100px; background:var(--heart);
+  transform:rotate(-45deg);
+  animation:beat 1.4s ease-in-out infinite;
+  box-shadow:0 0 50px var(--glow);
+}
+.heart::before,.heart::after{
+  content:""; position:absolute; width:100px; height:100px; border-radius:50%; background:var(--heart);
+}
+.heart::before{top:-50px; left:0}
+.heart::after{left:50px; top:0}
+@keyframes beat{
+  0%,100%{transform:rotate(-45deg) scale(1)}
+  15%{transform:rotate(-45deg) scale(1.2)}
+  30%{transform:rotate(-45deg) scale(1)}
+  45%{transform:rotate(-45deg) scale(1.14)}
+  60%{transform:rotate(-45deg) scale(1)}
+}
+.ring{
+  position:absolute; inset:0; border-radius:50%;
+  border:2px solid var(--heart); opacity:0;
+  animation:ripple 2.8s ease-out infinite;
+}
+.ring:nth-child(2){animation-delay:.9s}
+.ring:nth-child(3){animation-delay:1.8s}
+@keyframes ripple{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.6);opacity:0}}
+
+/* Text */
+h1{
+  display:flex; flex-wrap:wrap; justify-content:center; text-align:center; gap:.04em; font-size:clamp(2.4rem,10vw,5rem); font-weight:800; letter-spacing:.02em;
+  font-family:Georgia,'Times New Roman',serif; font-style:italic;
+}
+h1 span{
+  display:inline-block; opacity:0; transform:translateY(30px) scale(.8);
+  background:linear-gradient(90deg,#fff,#ffb3c7,#ff3d71,#ffb3c7,#fff);
+  background-size:300% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 0 14px var(--glow));
+  animation:rise .8s cubic-bezier(.2,.9,.3,1.3) forwards, shimmer 5s linear infinite, bob 3s ease-in-out infinite;
+  animation-delay:calc(var(--i)*.12s + .3s), 0s, calc(var(--i)*.12s + 1.5s);
+}
+h1 .sp{width:.35em}
+h1 .br{flex-basis:100%; height:0}
+
+.note{
+  position:relative; max-width:520px; width:100%; padding:1.6rem 1.5rem; text-align:center;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,140,170,.4); border-radius:20px;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 0 40px rgba(255,61,113,.25);
+  font-family:Georgia,'Times New Roman',serif; font-size:clamp(1rem,3.6vw,1.2rem); line-height:1.8;
+  opacity:0; transform:translateY(20px); animation:noteIn 1.4s ease 2.6s forwards;
+}
+.note p{margin-bottom:.9rem}
+.note .to{font-size:1.3em; font-style:italic; color:#ffb3c7}
+.note .ask{
+  font-size:1.35em; font-weight:700; color:#fff; margin:1.1rem 0 .8rem;
+  animation:pulse 1.8s ease-in-out infinite; text-shadow:0 0 16px var(--glow);
+}
+.note .from{color:#ffc2d4; font-style:italic; margin-bottom:0}
+@keyframes noteIn{to{opacity:1; transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes rise{to{opacity:1; transform:translateY(0) scale(1)}}
+@keyframes shimmer{to{background-position:300% 0}}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -8px}}
+
+.sub{
+  margin-top:-2rem; font-size:clamp(.9rem,3vw,1.15rem); letter-spacing:.35em; text-transform:uppercase;
+  opacity:0; animation:fade 2s ease 2.2s forwards; color:#ffc2d4;
+}
+@keyframes fade{to{opacity:.85}}
+
+/* Floating hearts */
+.f{
+  position:fixed; bottom:-60px; left:var(--x); font-size:var(--s); color:var(--heart);
+  opacity:0; pointer-events:none; text-shadow:0 0 12px var(--glow);
+  animation:float var(--d) linear var(--delay) infinite;
+}
+@keyframes float{
+  0%{transform:translateY(0) translateX(0) rotate(0); opacity:0}
+  10%{opacity:.9}
+  50%{transform:translateY(-55vh) translateX(25px) rotate(15deg)}
+  100%{transform:translateY(-115vh) translateX(-20px) rotate(-15deg); opacity:0}
+}
+
+/* Twinkling stars */
+.star{position:fixed; width:3px; height:3px; border-radius:50%; background:#fff; top:var(--y); left:var(--x);
+  animation:tw 3s ease-in-out var(--delay) infinite; opacity:0}
+@keyframes tw{0%,100%{opacity:0; transform:scale(.5)}50%{opacity:.9; transform:scale(1.6)}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important}
+}
+</style>
+</head>
+<body>
+
+<!-- stars -->
+<i class="star" style="--x:8%;--y:12%;--delay:0s"></i>
+<i class="star" style="--x:22%;--y:30%;--delay:.8s"></i>
+<i class="star" style="--x:75%;--y:10%;--delay:1.4s"></i>
+<i class="star" style="--x:90%;--y:35%;--delay:.4s"></i>
+<i class="star" style="--x:60%;--y:22%;--delay:2s"></i>
+<i class="star" style="--x:40%;--y:8%;--delay:1.1s"></i>
+
+<!-- floating hearts -->
+<span class="f" style="--x:6%;--s:18px;--d:9s;--delay:0s">♥</span>
+<span class="f" style="--x:16%;--s:30px;--d:12s;--delay:2s">♥</span>
+<span class="f" style="--x:28%;--s:16px;--d:8s;--delay:4s">♥</span>
+<span class="f" style="--x:40%;--s:26px;--d:11s;--delay:1s">♥</span>
+<span class="f" style="--x:52%;--s:20px;--d:10s;--delay:5s">♥</span>
+<span class="f" style="--x:64%;--s:34px;--d:13s;--delay:3s">♥</span>
+<span class="f" style="--x:76%;--s:18px;--d:9s;--delay:6s">♥</span>
+<span class="f" style="--x:86%;--s:28px;--d:12s;--delay:1.5s">♥</span>
+<span class="f" style="--x:94%;--s:16px;--d:8s;--delay:3.5s">♥</span>
+
+<div class="heart-wrap">
+  <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+  <div class="heart"></div>
+</div>
+
+<h1 aria-label="I Love You Babu">
+  <span style="--i:0">I</span>
+  <span class="sp"></span>
+  <span style="--i:2">L</span><span style="--i:3">o</span><span style="--i:4">v</span><span style="--i:5">e</span>
+  <span class="sp"></span>
+  <span style="--i:7">Y</span><span style="--i:8">o</span><span style="--i:9">u</span>
+  <span class="br"></span>
+  <span style="--i:11">B</span><span style="--i:12">a</span><span style="--i:13">b</span><span style="--i:14">u</span><span style="--i:15">♥</span>
+</h1>
+<div class="note">
+  <p class="to">Meri pyaari Babu,</p>
+  <p>Tumse milne ke baad meri duniya thodi aur khoobsurat ho gayi hai. Tumhari hasi meri sabse favourite cheez hai, aur tumhare saath bitaya har pal meri zindagi ka sabse pyaara pal.</p>
+  <p>Mujhe har khushi mein, har mushkil mein, aur har chai ke saath tumhara haath thaamna hai. Poori zindagi tumhare saath bitaani hai. 💕</p>
+  <p class="ask">Will you be mine, forever? 💍</p>
+  <p class="from">Sirf tumhara ❤️</p>
+</div>
+
+</body>
+</html>
